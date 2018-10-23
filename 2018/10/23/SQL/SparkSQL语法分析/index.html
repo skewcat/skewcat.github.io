@@ -5,15 +5,15 @@
   
 
   
-  <title>skewcat-test | Hexo</title>
+  <title>SparkSQL语法分析 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="DataFrame &amp;amp; array扁平化 数组/列表在一次使用DataFrame获取mongodb的数据时，发现获取到的值为： 1234567891011121314151617181920root |-- _id: struct (nullable = true) |    |-- oid: string (nullable = true) |-- count: integer (nul">
+  <meta name="description" content="介绍SparkSQL的较为复杂的语法以及操作">
 <meta name="keywords" content="spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="skewcat-test">
+<meta property="og:title" content="SparkSQL语法分析">
 <meta property="og:url" content="http://yoursite.com/2018/10/23/SQL/SparkSQL语法分析/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="DataFrame &amp;amp; array扁平化 数组/列表在一次使用DataFrame获取mongodb的数据时，发现获取到的值为： 1234567891011121314151617181920root |-- _id: struct (nullable = true) |    |-- oid: string (nullable = true) |-- count: integer (nul">
+<meta property="og:description" content="介绍SparkSQL的较为复杂的语法以及操作">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/10/23/SQL/SparkSQL语法分析/assets/1536753935648.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/23/SQL/SparkSQL语法分析/assets/1536754052219.png">
@@ -21,10 +21,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/10/23/SQL/SparkSQL语法分析/assets/1536755351700.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/23/SQL/SparkSQL语法分析/assets/1536760082841.png">
 <meta property="og:image" content="http://yoursite.com/2018/10/23/SQL/SparkSQL语法分析/assets/1536760026049.png">
-<meta property="og:updated_time" content="2018-10-23T04:57:33.121Z">
+<meta property="og:updated_time" content="2018-10-23T05:03:11.495Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="skewcat-test">
-<meta name="twitter:description" content="DataFrame &amp;amp; array扁平化 数组/列表在一次使用DataFrame获取mongodb的数据时，发现获取到的值为： 1234567891011121314151617181920root |-- _id: struct (nullable = true) |    |-- oid: string (nullable = true) |-- count: integer (nul">
+<meta name="twitter:title" content="SparkSQL语法分析">
+<meta name="twitter:description" content="介绍SparkSQL的较为复杂的语法以及操作">
 <meta name="twitter:image" content="http://yoursite.com/2018/10/23/SQL/SparkSQL语法分析/assets/1536753935648.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -75,7 +75,7 @@
         <section id="main"><article id="post-SQL/SparkSQL语法分析" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/23/SQL/SparkSQL语法分析/" class="article-date">
-  <time datetime="2018-10-23T01:58:15.000Z" itemprop="datePublished">2018-10-23</time>
+  <time datetime="2018-10-23T05:58:15.000Z" itemprop="datePublished">2018-10-23</time>
 </a>
     
   </div>
@@ -86,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      skewcat-test
+      SparkSQL语法分析
     </h1>
   
 
@@ -94,7 +94,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="DataFrame-amp-array"><a href="#DataFrame-amp-array" class="headerlink" title="DataFrame &amp; array"></a>DataFrame &amp; array</h1><h2 id="扁平化-数组-列表"><a href="#扁平化-数组-列表" class="headerlink" title="扁平化 数组/列表"></a>扁平化 数组/列表</h2><p>在一次使用DataFrame获取mongodb的数据时，发现获取到的值为：</p>
+        <p>介绍SparkSQL的较为复杂的语法以及操作<br><a id="more"></a></p>
+<h1 id="DataFrame-amp-array"><a href="#DataFrame-amp-array" class="headerlink" title="DataFrame &amp; array"></a>DataFrame &amp; array</h1><h2 id="扁平化-数组-列表"><a href="#扁平化-数组-列表" class="headerlink" title="扁平化 数组/列表"></a>扁平化 数组/列表</h2><p>在一次使用DataFrame获取mongodb的数据时，发现获取到的值为：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root</span><br><span class="line"> |-- _id: struct (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |-- oid: string (nullable = <span class="literal">true</span>)</span><br><span class="line"> |-- count: <span class="built_in">integer</span> (nullable = <span class="literal">true</span>)</span><br><span class="line"> |-- items: array (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |-- element: struct (containsNull = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- devices: array (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |    |-- element: string (containsNull = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- inOctets: long (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- octets: long (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- outLineName: string (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- outOctets: long (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- serviceBw: string (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- serviceProvider: string (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- templateId: long (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- yhdfList: array (nullable = <span class="literal">true</span>)</span><br><span class="line"> |    |    |    |-- element: array (containsNull = <span class="literal">true</span>)</span><br><span class="line"> |    |    |    |    |-- element: double (containsNull = <span class="literal">true</span>)</span><br><span class="line"> |    |    |-- zoneIds: string (nullable = <span class="literal">true</span>)</span><br><span class="line"> |-- ts: timestamp (nullable = <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
 <p>其真实数据的某些字段为</p>
 <p><img src="assets/1536753935648.png" alt="1536753935648"></p>
@@ -138,19 +139,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/10/23/skewcat-test/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          skewcat-test
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/10/22/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/10/23/skewcat-test/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
+      <div class="article-nav-title">skewcat-test</div>
     </a>
   
 </nav>
@@ -201,11 +193,11 @@
       <ul>
         
           <li>
-            <a href="/2018/10/23/skewcat-test/">skewcat-test</a>
+            <a href="/2018/10/23/SQL/SparkSQL语法分析/">SparkSQL语法分析</a>
           </li>
         
           <li>
-            <a href="/2018/10/23/SQL/SparkSQL语法分析/">skewcat-test</a>
+            <a href="/2018/10/23/skewcat-test/">skewcat-test</a>
           </li>
         
           <li>
